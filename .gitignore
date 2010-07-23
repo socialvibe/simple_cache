@@ -1,0 +1,8 @@
+.DS_Store
+log/*.log
+log/development.log
+log/test.log
+tmp/**/*
+db/*.sqlite3
+*.swp
+
