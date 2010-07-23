@@ -7,7 +7,7 @@ module SimpleCache
   module ClassMethods
 
     # In addition to adding the aliased methods this also creates them
-    def alias_simple_cache_method_chain(target,refresh_interval)
+    def alias_simple_cache_method_chain(target,refresh_interval,*precache_methods)
       # Shamelessly copied from alias_method_chain
       # Strip out punctuation on predicates or bang methods since
       # e.g. target?_without_feature is not a valid method name.
@@ -18,6 +18,7 @@ module SimpleCache
 
       class_eval(<<-EVAL, __FILE__, __LINE__)     
         def #{with_method}(*args)
+          #{precache_methods.join('\n')}
           simple_cache(:#{without_method},#{refresh_interval},*args)
         end
       EVAL
@@ -41,10 +42,6 @@ module SimpleCache
     end
     def simple_cache_purge(method, *args)
       simple_cache_purge_base(self,method,args)
-    end
-
-    def alias_method_simple_cache(method, *args)
-
     end
 
     # Base functions used by both Instance and Class methods
