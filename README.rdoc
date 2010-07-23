@@ -1,0 +1,40 @@
+=SimpleCache
+
+SimpleCache is designed as a very light caching layer to be used when a full
+blown solution such as CacheMoney or CacheFu is not necessary.
+
+It supports basic class and instance method level caching and includes a nifty
+(imo) cache method chaining ability.
+
+==Quick Start
+
+In your model:
+
+  class User < ActiveRecord::Base
+    include SimpleCache
+    
+    def my_method
+      # Do something
+    end
+    alias_simple_cache_method_chain(:my_method,5.minutes)
+
+    def my_second_method(param)
+      # Do something else
+    end
+
+    def my_second_method_cached
+      simple_cache(:my_second_method,5.minutes,'something')
+    end
+  end
+
+
+==Usage
+
+By including SimpleCache the following methods are exposed:
+
+simple_cache(method,refresh_interval,*args)
+
+simple_cache_purge(method,*args)
+
+alias_simple_cache_method_chain(target,refresh_interval)
+
